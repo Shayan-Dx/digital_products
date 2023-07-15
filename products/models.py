@@ -33,9 +33,22 @@ class Product(models.Model):
         verbose_name = _('Product')
         verbose_name_plural = _('Products')
 
+    def __str__(self):
+        return self.title
+
 class File(models.Model):
-    parent = models.ForeignKey('Product', verbose_name=_('product'), on_delete=models.CASCADE)
+    FILE_AUDIO = 1
+    FILE_VIDEO = 2
+    FILE_PDF = 3
+    FILE_TYPES = (
+        (FILE_AUDIO, _('Audio')),
+        (FILE_VIDEO, _('Video')),
+        (FILE_PDF, _('PDF'))
+    )
+
+    parent = models.ForeignKey('Product', verbose_name=_('product'), related_name="files", on_delete=models.CASCADE)
     title = models.CharField(_('title'),max_length=50)
+    file_type = models.PositiveSmallIntegerField(_('File Type'), choices=FILE_TYPES)
     file = models.FileField(_('file'), upload_to='files/%Y/%m/%d/')
     is_enable = models.BooleanField(_('is enable'),default=True)
     created_time = models.DateTimeField(_('created time'),auto_now_add=True)

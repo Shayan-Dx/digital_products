@@ -5,19 +5,19 @@ from rest_framework import serializers
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
-        fields = ('title', 'description', 'avatar')
+        fields = ('id', 'title', 'description', 'avatar')
 
 
 class FileSerializer(serializers.ModelSerializer):
     class Meta:
         model = File
-        fields = ('title', 'file')
+        fields = ('title', 'file', 'file_type')
 
 
-class ProductSerializer(serializers.ModelSerializer):
+class ProductSerializer(serializers.HyperlinkedModelSerializer):
     categories = CategorySerializer(many=True)
-    file_set = FileSerializer(many=True)
+    files = FileSerializer(many=True)
 
     class Meta:
         model = Product
-        fields = ('title', 'description', 'avatar', 'categories', 'file_set')
+        fields = ('id', 'title', 'description', 'avatar', 'categories', 'files', 'url')
