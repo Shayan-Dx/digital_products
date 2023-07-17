@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
 
 from .models import Category, Product, File
 from .serializers import CategorySerializer, ProductSerializer, FileSerializer
@@ -14,6 +15,8 @@ class ProductListView(APIView):
         return Response(serializer.data)
     
 class ProductDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
     def get(self, request, pk):
         try:
             product = Product.objects.get(pk = pk)
@@ -30,6 +33,7 @@ class CategoryListView(APIView):
         return Response(serializer.data)
 
 class CategoryDetailView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, pk):
         try:
             category = Category.objects.get(pk = pk)
@@ -46,6 +50,7 @@ class FileListView(APIView):
         return Response(serializer.data)
     
 class FileDetailView(APIView):
+    permission_classes = [IsAuthenticated]
     def get(self, request, pk, product_id):
         try:
             file = File.objects.get(pk=pk, parent_id=product_id)
